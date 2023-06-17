@@ -1,0 +1,62 @@
+import random
+
+# define a list of random words
+words = ["python", "programming", "computer", "algorithm", "function", "syntax"]
+
+# Ask for the ASCII arts for the hangman
+hangman_art = [
+    "   +---+\n   |   |\n       |\n       |\n       |\n       |\n=========",
+    "   +---+\n   |   |\n   O   |\n       |\n       |\n       |\n=========",
+    "   +---+\n   |   |\n   O   |\n   |   |\n       |\n       |\n=========",
+    "   +---+\n   |   |\n   O   |\n  /|   |\n       |\n       |\n=========",
+    "   +---+\n   |   |\n   O   |\n  /|\\  |\n       |\n       |\n=========",
+    "   +---+\n   |   |\n   O   |\n  /|\\  |\n  /    |\n       |\n=========",
+    "   +---+\n   |   |\n   O   |\n  /|\\  |\n  / \\  |\n       |\n========="
+]
+
+# define a function that chooses a random word from the list
+def choose_word():
+    return random.choice(words)
+
+def update_hangman(mistake):
+    print(hangman_art[mistake])
+
+def check_guess(guess):
+    global word_with_blank
+    if guess in word:
+        for i in range(len(word)):
+            if word[i] == guess:
+                word_with_blank = word_with_blank[:i] + guess + word_with_blank[i+1:]
+        
+        print("Correct guess!")
+        print("Word: " + word_with_blank)
+        
+        if word_with_blank == word:  # Check if all letters have been guessed correctly
+            end_game("Win")
+    else:
+        global mistake
+        mistake += 1
+        print("Wrong guess!")
+        update_hangman(mistake)
+        
+        if mistake == 6:
+            end_game("Lose")
+
+def end_game(result):
+    if result == "Win":
+        print("Congratulations! You Win!")
+    else:
+        print("Sorry, You Lose. The word was " + word)
+
+word = choose_word()
+word_with_blank = "-" * len(word)
+
+print("Hangman Game")
+print("Guess the word: " + word_with_blank)
+
+mistake = 0
+update_hangman(mistake)
+
+while True:
+    guess = input("Enter your guess: ")
+    check_guess(guess)
